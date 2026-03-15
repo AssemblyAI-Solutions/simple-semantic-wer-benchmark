@@ -13,12 +13,7 @@ This script:
 import json
 import csv
 from pathlib import Path
-from jiwer import wer, mer, wil, wip
-try:
-    from jiwer import process_words
-except ImportError:
-    # Fallback for older versions
-    from jiwer import compute_measures as process_words
+from jiwer import process_words
 
 # Import available normalizers
 # You can change which normalizer to use by uncommenting one of these:
