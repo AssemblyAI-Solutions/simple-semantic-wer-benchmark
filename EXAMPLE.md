@@ -5,10 +5,10 @@ This guide walks through a complete example of using the Simple Semantic WER Ben
 ## Scenario
 
 You have a recording of a conversation where:
-- The human transcriber wrote: "That's all right, we can meet off site tomorrow"
-- AssemblyAI transcribes: "That's alright, we can meet offsite tomorrow"
+- The human transcriber wrote: "That's all right, we can discuss health care and set up a meeting"
+- AssemblyAI transcribes: "That's alright, we can discuss healthcare and setup a meeting"
 
-Traditional WER would show 2 substitutions (all right → alright, off site → offsite), giving a WER of 2/8 = 25%.
+Traditional WER would show 3 substitutions (all right → alright, health care → healthcare, set up → setup), giving a WER of 3/11 = 27%.
 
 With semantic normalization, WER is 0% because the words are equivalent.
 
@@ -30,7 +30,7 @@ nano .env  # Add your API key
 Create a truth file at `truth/example_conversation.txt`:
 
 ```
-That's all right, we can meet off site tomorrow
+That's all right, we can discuss health care and set up a meeting
 ```
 
 Add your audio file at `audio/example_conversation.mp3`
@@ -46,9 +46,12 @@ Edit `semantic_wer_list.json`:
     "alright"
   ],
   [
-    "off site",
-    "offsite",
-    "off-site"
+    "health care",
+    "healthcare"
+  ],
+  [
+    "set up",
+    "setup"
   ]
 ]
 ```
@@ -148,29 +151,30 @@ Open `results/benchmark_results.csv`:
 
 | file_name | wer | insertions | deletions | substitutions | truth_original | prediction_original | truth_normalized | prediction_normalized |
 |-----------|-----|------------|-----------|---------------|----------------|---------------------|------------------|----------------------|
-| example_conversation | 0.0 | 0 | 0 | 0 | That's all right, we can meet off site tomorrow | That's alright, we can meet offsite tomorrow | that s all right we can meet off site tomorrow | that s all right we can meet off site tomorrow |
+| example_conversation | 0.0 | 0 | 0 | 0 | That's all right, we can discuss health care and set up a meeting | That's alright, we can discuss healthcare and setup a meeting | that s all right we can discuss health care and set up a meeting | that s all right we can discuss health care and set up a meeting |
 
 ## Understanding the Results
 
 ### Without Semantic Normalization
 
 If we hadn't used semantic_wer_list.json:
-- Truth (normalized): "that s all right we can meet off site tomorrow"
-- Prediction (normalized): "that s alright we can meet offsite tomorrow"
-- WER: 2/8 = 0.25 (25%)
-- Substitutions: 2 (alright, offsite)
+- Truth (normalized): "that s all right we can discuss health care and set up a meeting"
+- Prediction (normalized): "that s alright we can discuss healthcare and setup a meeting"
+- WER: 3/11 = 0.27 (27%)
+- Substitutions: 3 (alright, healthcare, setup)
 
 ### With Semantic Normalization
 
 With semantic_wer_list.json:
-- Truth (normalized): "that s all right we can meet off site tomorrow"
-- Prediction (normalized): "that s all right we can meet off site tomorrow"
-- WER: 0/8 = 0.0 (0%)
+- Truth (normalized): "that s all right we can discuss health care and set up a meeting"
+- Prediction (normalized): "that s all right we can discuss health care and set up a meeting"
+- WER: 0/11 = 0.0 (0%)
 - Substitutions: 0
 
 The semantic replacements converted:
 - "alright" → "all right"
-- "offsite" → "off site"
+- "healthcare" → "health care"
+- "setup" → "set up"
 
 Both truth and prediction now match perfectly!
 

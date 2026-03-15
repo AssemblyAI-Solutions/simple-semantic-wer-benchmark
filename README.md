@@ -7,7 +7,7 @@ A simple tool for benchmarking speech-to-text systems with semantic Word Error R
 Modern speech-to-text models like AssemblyAI's Universal-3 Pro are incredibly accurate—sometimes **more accurate than human transcription**. This creates challenges when evaluating with traditional WER metrics:
 
 1. **Insertions**: The AI correctly transcribes words that human transcribers missed
-2. **Substitutions**: The AI uses different but semantically equivalent formatting (e.g., "all right" vs "alright", "off site" vs "offsite")
+2. **Substitutions**: The AI uses different but semantically equivalent formatting (e.g., "all right" vs "alright", "health care" vs "healthcare")
 
 This tool addresses both issues by:
 - Applying **Whisper normalization** to standardize formatting
@@ -156,9 +156,12 @@ Define word groups that should be treated as equivalent. The **first word** in e
     "alright"       // Variant (will be replaced)
   ],
   [
-    "off site",     // Canonical form
-    "offsite",      // Variant 1
-    "off-site"      // Variant 2
+    "health care",  // Canonical form
+    "healthcare"    // Variant (will be replaced)
+  ],
+  [
+    "set up",       // Canonical form
+    "setup"         // Variant (will be replaced)
   ]
 ]
 ```
@@ -192,7 +195,8 @@ audio/podcast.m4a     → truth/podcast.txt
    ```json
    [
      ["all right", "alright"],
-     ["off site", "offsite"]
+     ["health care", "healthcare"],
+     ["set up", "setup"]
    ]
    ```
 
@@ -202,8 +206,8 @@ audio/podcast.m4a     → truth/podcast.txt
    ```
 
 4. **Results**:
-   - Raw prediction: "That's alright, we can meet offsite"
-   - After normalization: Both become "that's all right we can meet off site"
+   - Raw prediction: "That's alright, we can discuss healthcare and setup"
+   - After normalization: Both become "that's all right we can discuss health care and set up"
    - WER: 0.0 (perfect match after semantic normalization)
 
 ## Understanding the Metrics
