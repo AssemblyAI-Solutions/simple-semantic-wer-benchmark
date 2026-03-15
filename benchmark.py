@@ -13,7 +13,12 @@ This script:
 import json
 import csv
 from pathlib import Path
-from jiwer import wer, mer, wil, wip, compute_measures
+from jiwer import wer, mer, wil, wip
+try:
+    from jiwer import process_words
+except ImportError:
+    # Fallback for older versions
+    from jiwer import compute_measures as process_words
 
 # Import available normalizers
 # You can change which normalizer to use by uncommenting one of these:
@@ -87,18 +92,18 @@ def normalize_text(text, semantic_list):
 
 def calculate_wer_metrics(truth, prediction):
     """Calculate WER metrics using jiwer."""
-    # Compute detailed measures
-    measures = compute_measures(truth, prediction)
+    # Compute detailed measures using process_words
+    output = process_words(truth, prediction)
 
     return {
-        "wer": measures["wer"],
-        "mer": measures["mer"],
-        "wil": measures["wil"],
-        "wip": measures["wip"],
-        "insertions": measures["insertions"],
-        "deletions": measures["deletions"],
-        "substitutions": measures["substitutions"],
-        "hits": measures["hits"]
+        "wer": output.wer,
+        "mer": output.mer,
+        "wil": output.wil,
+        "wip": output.wip,
+        "insertions": output.insertions,
+        "deletions": output.deletions,
+        "substitutions": output.substitutions,
+        "hits": output.hits
     }
 
 
