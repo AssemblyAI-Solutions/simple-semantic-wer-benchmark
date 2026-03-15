@@ -1,0 +1,54 @@
+{
+  "assemblyai": {
+    "speech_models": ["universal-3-pro"],
+    "language_detection": true
+
+    // Uncomment and configure any of the following parameters as needed:
+    // For full prompting guide, see: https://www.assemblyai.com/docs/pre-recorded-audio/prompting
+    // Recommended prompt for reducing hallucinations: https://www.assemblyai.com/docs/pre-recorded-audio/prompting#handling-unclear-audio-with-masked
+
+    // "prompt": "Always: Transcribe speech exactly as heard. If uncertain or audio is unclear, mark as [masked]. After the first output, review the transcript again. Pay close attention to hallucinations, misspellings, or errors, and revise them like a computer performing spell and grammar checks. Ensure words and phrases make grammatical sense in sentences.",
+    // "keyterms_prompt": ["term1", "term2", "term3"],
+    // "temperature": 0.0,
+    // "remove_audio_tags": "all",
+
+    // Language settings
+    // "language_code": "en_us",
+    // "language_confidence_threshold": 0.0,
+
+    // Transcription features
+    // "punctuate": true,
+    // "format_text": true,
+    // "disfluencies": false,
+    // "multichannel": false,
+
+    // Audio processing
+    // "audio_start_from": 0,
+    // "audio_end_at": null,
+    // "speech_threshold": null,
+
+    // Speaker features (Note: This benchmark does NOT support diarization in output)
+    // "speaker_labels": false,
+    // "speakers_expected": null,
+
+    // Content features
+    // "filter_profanity": false,
+    // "redact_pii": false,
+    // "redact_pii_policies": [],
+    // "redact_pii_sub": "entity_name",
+
+    // Audio Intelligence features
+    // "auto_highlights": false,
+    // "content_safety": false,
+    // "entity_detection": false,
+    // "iab_categories": false,
+    // "sentiment_analysis": false,
+    // "summarization": false,
+    // "auto_chapters": false,
+
+    // Custom spelling
+    // "custom_spelling": [
+    //   {"from": ["Glicoside"], "to": "Glycoside"}
+    // ]
+  }
+}
