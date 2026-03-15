@@ -14,7 +14,11 @@ import json
 import csv
 from pathlib import Path
 from jiwer import wer, mer, wil, wip, compute_measures
-from whisper_normalizer.english import EnglishTextNormalizer
+
+# Import available normalizers
+# You can change which normalizer to use by uncommenting one of these:
+from whisper_normalizer.english import EnglishTextNormalizer  # Default: English-specific normalization
+# from whisper_normalizer.basic import BasicTextNormalizer    # Alternative: Basic normalization (good for non-English)
 
 # Configuration
 TRUTH_DIR = Path("truth")
@@ -28,7 +32,9 @@ PREDICTIONS_NORMALIZED_DIR.mkdir(parents=True, exist_ok=True)
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Initialize normalizer
-normalizer = EnglishTextNormalizer()
+# Change this line to use a different normalizer:
+normalizer = EnglishTextNormalizer()  # Default: English normalization
+# normalizer = BasicTextNormalizer()  # Alternative: Basic normalization
 
 
 def load_semantic_wer_list():

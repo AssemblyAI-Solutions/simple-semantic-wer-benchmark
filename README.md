@@ -222,8 +222,9 @@ Good WER scores:
 ## Limitations
 
 - **No diarization support**: This tool uses plain text transcriptions only. Speaker labels are not preserved in the benchmark.
-- **English only**: Whisper normalizer is configured for English. For other languages, you may need to adjust the normalization approach.
 - **Text-only**: Does not evaluate timing, confidence scores, or other metadata.
+
+**Note**: The default normalizer is configured for English (`EnglishTextNormalizer`). For other languages, use `BasicTextNormalizer` instead. See [Custom Normalization](#custom-normalization) for details.
 
 ## Advanced Usage
 
@@ -239,12 +240,84 @@ python benchmark.py
 
 ### Custom Normalization
 
-Edit `benchmark.py` to customize the normalization pipeline:
+The tool uses **Whisper normalization** by default to standardize text before calculating WER. You can customize which normalizer to use by editing `benchmark.py`.
+
+#### Available Normalizers
+
+1. **EnglishTextNormalizer** (Default)
+   - Best for: English audio
+   - Features: Language-specific rules, handles contractions, standardizes formatting
+   - Example: "don't" → "do not", removes punctuation, lowercases
+
+2. **BasicTextNormalizer**
+   - Best for: Non-English languages, minimal processing
+   - Features: Basic lowercasing and punctuation removal
+   - More permissive than EnglishTextNormalizer
+
+#### How to Change the Normalizer
+
+Open `benchmark.py` and modify lines 16-25:
+
+**Option 1: Use BasicTextNormalizer (for non-English)**
 
 ```python
-# Use BasicTextNormalizer instead of EnglishTextNormalizer
+# Comment out the English normalizer import
+# from whisper_normalizer.english import EnglishTextNormalizer
 from whisper_normalizer.basic import BasicTextNormalizer
+
+# Change the normalizer initialization
 normalizer = BasicTextNormalizer()
+```
+
+**Option 2: Use EnglishTextNormalizer (default)**
+
+```python
+from whisper_normalizer.english import EnglishTextNormalizer
+
+normalizer = EnglishTextNormalizer()
+```
+
+**Option 3: Disable normalization (not recommended)**
+
+If you want to skip Whisper normalization entirely:
+
+```python
+# Define a no-op normalizer
+def normalizer(text):
+    return text.lower()  # Only lowercase
+```
+
+#### When to Change the Normalizer
+
+- **Use BasicTextNormalizer** if:
+  - Your audio is in a non-English language
+  - You're getting unexpected normalization results
+  - You want minimal text processing
+
+- **Use EnglishTextNormalizer** if:
+  - Your audio is in English (default)
+  - You want standard WER evaluation
+  - You need contraction handling ("don't" → "do not")
+
+- **Disable normalization** if:
+  - You've already normalized your truth files
+  - You want to control normalization yourself
+  - You're testing raw transcription quality
+
+#### Example: Spanish Audio
+
+For Spanish audio, use BasicTextNormalizer:
+
+```python
+from whisper_normalizer.basic import BasicTextNormalizer
+
+normalizer = BasicTextNormalizer()
+```
+
+Then run your benchmark as usual:
+
+```bash
+python benchmark.py
 ```
 
 ### Analyzing Results
